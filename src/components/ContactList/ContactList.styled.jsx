@@ -13,7 +13,7 @@ export const List = styled.ul`
 `;
 
 export const Item = styled.li`
-  border: 2px solid black;
+  border: 1px solid black;
   padding: 6px;
   border-radius: 8px;
   margin-bottom: 5px;
