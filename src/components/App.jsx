@@ -74,9 +74,6 @@ class App extends Component {
     const { filter } = this.state;
     return (
       <>
-        <button type="button" onClick={() => console.log(this.state)}>
-          Log
-        </button>
         <MyStyles.Container>
           <MyStyles.Header>PhoneBook</MyStyles.Header>
           <Form onSubmit={this.addContact}></Form>
