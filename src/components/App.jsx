@@ -4,21 +4,24 @@ import * as MyStyles from './MyStyles';
 import Form from './Form/Form';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
+
 class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
+
   componentDidMount() {
     const storedContacts = localStorage.getItem('contacts');
 
     if (storedContacts) {
       this.setState({ contacts: JSON.parse(storedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      this.addToLocalStorage();
     }
   }
 
@@ -34,6 +37,7 @@ class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+
   addContact = contact => {
     const isInContacts = this.state.contacts.some(
       ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
@@ -44,34 +48,25 @@ class App extends Component {
       return;
     }
 
-    this.setState(
-      prevState => ({
-        contacts: [{ id: nanoid(), ...contact }, ...prevState.contacts],
-      }),
-      () => {
-        this.addToLocalStorage();
-      }
-    );
+    this.setState(prevState => ({
+      contacts: [{ id: nanoid(), ...contact }, ...prevState.contacts],
+    }));
   };
+
   addToLocalStorage = () => {
     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
   };
+
   removeContact = contactId => {
-    this.setState(
-      prevState => {
-        return {
-          contacts: prevState.contacts.filter(({ id }) => id !== contactId),
-        };
-      },
-      () => {
-        this.addToLocalStorage();
-      }
-    );
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(({ id }) => id !== contactId),
+    }));
   };
 
   render() {
     const visibleContacts = this.getVisibleContacts();
     const { filter } = this.state;
+
     return (
       <>
         <MyStyles.Container>
